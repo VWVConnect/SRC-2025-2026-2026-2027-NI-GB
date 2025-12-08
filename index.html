@@ -28,21 +28,23 @@
       <span>Northern Ireland</span>
     </div>
 
-    <!-- NEW: Rate Year Selector -->
+    <!-- Rate Year Selector -->
     <div class="rate-container">
       <p><strong>Select Rate Year:</strong></p>
-      <label>
-        <input type="radio" name="rateYear" value="2025" checked />
+
+      <label class="rate-option">
+        <input type="radio" name="rateYear" value="2025" checked>
         2025–2026 Rates
-      </label><br>
-      <label>
-        <input type="radio" name="rateYear" value="2026" />
+      </label>
+
+      <label class="rate-option">
+        <input type="radio" name="rateYear" value="2026">
         2026–2027 Rates
       </label>
     </div>
 
     <div class="button-group">
-      <button id="calculateBtn">Calculate</button>
+      <button id="calculateBtn" type="button">Calculate</button>
       <button id="resetBtn" type="button">Reset</button>
     </div>
 
