@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const region = getSelectedRegion();
     const rateYear = selectedRateYear;
 
-    // Weekly caps (placeholder)
+    // Weekly caps (update with official rates)
     const caps = {
       GB: { "2025": 719, "2026": 719 },
       NI: { "2025": 749, "2026": 749 }
@@ -71,8 +71,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const redundancyPay = (totalWeeks * pay).toFixed(2);
-    resultOutput.textContent =
-      `Statutory Redundancy Pay (${region === 'GB' ? 'Great Britain' : 'Northern Ireland'} – ${rateYear} rates): £${redundancyPay} (${totalWeeks} weeks)`;
+
+    // Dynamic disclaimer
+    let disclaimer = "";
+    if (rateYear === "2025") {
+      disclaimer = "The stated rate will remain in effect until 05 April 2026.";
+    }
+
+    resultOutput.innerHTML =
+      `Statutory Redundancy Pay (${region === 'GB' ? 'Great Britain' : 'Northern Ireland'} – ${rateYear} rates): £${redundancyPay} (${totalWeeks} weeks)<br><em>${disclaimer}</em>`;
   });
 
   resetBtn.addEventListener('click', function () {
@@ -88,3 +95,4 @@ document.addEventListener('DOMContentLoaded', function () {
     selectedRateYear = "2025";
   });
 });
+
