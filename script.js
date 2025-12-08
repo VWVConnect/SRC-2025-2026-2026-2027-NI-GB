@@ -1,169 +1,106 @@
-/* General styles */
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  color: #192543;
-  background-color: white;
-}
+document.addEventListener('DOMContentLoaded', function () {
+  const ageInput = document.getElementById('age');
+  const yearsInput = document.getElementById('years');
+  const payInput = document.getElementById('pay');
+  const resultOutput = document.getElementById('result');
+  const calculateBtn = document.getElementById('calculateBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const regionSwitch = document.getElementById('regionSwitch');
+  const rateButtons = document.querySelectorAll('.rate-btn');
+  const rateToggleBar = document.querySelector('.rate-toggle-bar');
 
-.calculator-container {
-  max-width: 500px;
-  margin: 0 auto 40px auto;
-  padding: 20px;
-  border-radius: 16px;
-  background-color: white;
-}
+  let selectedRateYear = "2025"; // default
 
-label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: bold;
-}
+  // Segmented toggle functionality with sliding background
+  rateButtons.forEach((btn, index) => {
+    btn.addEventListener('click', function () {
+      rateButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedRateYear = btn.dataset.year;
 
-input[type="number"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 16px;
-  border: 2px solid #7fc28f;
-  border-radius: 8px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
+      // Slide the background
+      rateToggleBar.style.setProperty('--slider-left', `${index * 50}%`);
+      rateToggleBar.querySelector('::before'); // required to trigger the variable
+      rateToggleBar.style.setProperty('--slider-left', `${index * 50}%`);
+      rateToggleBar.style.setProperty('left', `${index * 50}%`);
+      rateToggleBar.style.left = `${index * 50}%`;
+      rateToggleBar.style.setProperty('transition', 'left 0.3s ease');
+    });
+  });
 
-/* Region switch */
-.switch-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin: 20px 0;
-  font-weight: bold;
-  color: #192543;
-}
+  function getSelectedRegion() {
+    return regionSwitch.checked ? 'NI' : 'GB';
+  }
 
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
+  calculateBtn.addEventListener('click', function () {
+    const age = parseInt(ageInput.value);
+    const years = parseInt(yearsInput.value);
+    let pay = parseFloat(payInput.value);
+    const region = getSelectedRegion();
+    const rateYear = selectedRateYear;
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+    // Weekly caps (official rates)
+    const caps = {
+      GB: { "2025": 719, "2026": 719 },
+      NI: { "2025": 749, "2026": 749 }
+    };
 
-.slider {
-  position: absolute;
-  cursor: pointer;
-  background-color: white;
-  border: 2px solid #00a6c5;
-  border-radius: 34px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: 0.4s;
-}
+    const maxWeeklyPay = caps[region][rateYear];
+    const maxYears = 20;
 
-.slider::before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 3px;
-  background-color: #00a6c5;
-  transition: 0.4s;
-  border-radius: 50%;
-}
+    // Input validation
+    if (isNaN(age) || isNaN(years) || isNaN(pay)) {
+      resultOutput.textContent = 'Please fill in all fields correctly.';
+      return;
+    }
+    if (age < 16 || age > 100) {
+      resultOutput.textContent = 'Age must be between 16 and 100.';
+      return;
+    }
+    if (years < 0 || years > 50) {
+      resultOutput.textContent = 'Years of service must be between 0 and 50.';
+      return;
+    }
+    if (pay < 0) {
+      resultOutput.textContent = 'Weekly pay must be a positive number.';
+      return;
+    }
 
-input:checked + .slider::before {
-  transform: translateX(26px);
-}
+    // Apply cap
+    pay = Math.min(pay, maxWeeklyPay);
 
-/* Rate toggle bar (segmented control with sliding background) */
-.rate-toggle-bar {
-  position: relative;
-  display: flex;
-  border: 2px solid #00a6c5;
-  border-radius: 8px;
-  overflow: hidden;
-  margin: 20px 0;
-}
+    // Calculate redundancy weeks
+    const effectiveYears = Math.min(years, maxYears);
+    let totalWeeks = 0;
+    for (let i = 0; i < effectiveYears; i++) {
+      const yearAge = age - i - 1;
+      if (yearAge < 22) totalWeeks += 0.5;
+      else if (yearAge < 41) totalWeeks += 1;
+      else totalWeeks += 1.5;
+    }
 
-/* Sliding background */
-.rate-toggle-bar::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  background-color: #00a6c5;
-  border-radius: 6px;
-  z-index: 1;
-  transition: left 0.3s ease;
-}
+    const redundancyPay = (totalWeeks * pay).toFixed(2);
 
-.rate-toggle-bar .rate-btn {
-  flex: 1;
-  padding: 10px 0;
-  border: none;
-  background: none;
-  color: #00a6c5;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 2;
-  position: relative;
-  transition: color 0.3s;
-}
+    // Dynamic disclaimer
+    let disclaimer = "";
+    if (rateYear === "2025") {
+      disclaimer = "The stated rate will remain in effect until 05 April 2026.";
+    }
 
-.rate-toggle-bar .rate-btn.active {
-  color: white;
-}
+    resultOutput.innerHTML =
+      `Statutory Redundancy Pay (${region === 'GB' ? 'Great Britain' : 'Northern Ireland'} – ${rateYear} rates): £${redundancyPay} (${totalWeeks} weeks)<br><em>${disclaimer}</em>`;
+  });
 
-/* Buttons */
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 30px;
-  margin-top: 20px;
-}
+  resetBtn.addEventListener('click', function () {
+    ageInput.value = '';
+    yearsInput.value = '';
+    payInput.value = '';
+    resultOutput.textContent = '';
+    regionSwitch.checked = false;
 
-button {
-  flex: 1;
-  padding: 12px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-#calculateBtn {
-  background-color: #07b0a0;
-  color: white;
-}
-
-#resetBtn {
-  background-color: #7fc28f;
-  color: white;
-}
-
-/* Result text */
-#result {
-  margin-top: 16px;
-  font-weight: bold;
-  text-align: center;
-  color: #192543;
-}
-
-#result em {
-  font-style: italic;
-  font-weight: normal;
-  font-size: 14px;
-  color: #555;
-}
+    // Reset rate toggle
+    rateButtons.forEach(b => b.classList.remove('active'));
+    rateButtons[0].classList.add('active');
+    selectedRateYear = "2025";
+  });
+});
