@@ -15,12 +15,6 @@ html, body {
   background-color: white;
 }
 
-/* Remove any top margin/padding from the first child inside the container */
-.calculator-container > *:first-child {
-  margin-top: 0;
-  padding-top: 0;
-}
-
 label {
   display: block;
   margin-bottom: 6px;
@@ -37,8 +31,8 @@ input[type="number"] {
   box-sizing: border-box;
 }
 
-/* Switch container (region & rate) */
-.switch-container, .rate-toggle-container {
+/* Region switch */
+.switch-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,7 +42,6 @@ input[type="number"] {
   color: #192543;
 }
 
-/* The switch */
 .switch {
   position: relative;
   display: inline-block;
@@ -91,6 +84,31 @@ input:checked + .slider::before {
   transform: translateX(26px);
 }
 
+/* Rate toggle bar (segmented control) */
+.rate-toggle-bar {
+  display: flex;
+  border: 2px solid #00a6c5;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+
+.rate-toggle-bar .rate-btn {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  background-color: white;
+  color: #00a6c5;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.rate-toggle-bar .rate-btn.active {
+  background-color: #00a6c5;
+  color: white;
+}
+
 /* Buttons */
 .button-group {
   display: flex;
@@ -119,6 +137,7 @@ button {
   color: white;
 }
 
+/* Result text */
 #result {
   margin-top: 16px;
   font-weight: bold;
