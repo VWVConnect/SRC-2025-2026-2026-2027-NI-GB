@@ -51,41 +51,5 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
     if (pay < 0) {
-      resultOutput.textContent = 'Weekly pay must be a positive number.';
-      return;
-    }
+      resultOutput.textContent = 'Weekly pay must be
 
-    pay = Math.min(pay, maxWeeklyPay);
-
-    const effectiveYears = Math.min(years, maxYears);
-    let totalWeeks = 0;
-    for (let i = 0; i < effectiveYears; i++) {
-      const yearAge = age - i - 1;
-      if (yearAge < 22) totalWeeks += 0.5;
-      else if (yearAge < 41) totalWeeks += 1;
-      else totalWeeks += 1.5;
-    }
-
-    const redundancyPay = (totalWeeks * pay).toFixed(2);
-
-    let disclaimer = "";
-    if (rateYear === "2025") {
-      disclaimer = "The stated rate will remain in effect until 05 April 2026.";
-    }
-
-    resultOutput.innerHTML =
-      `Statutory Redundancy Pay (${region === 'GB' ? 'Great Britain' : 'Northern Ireland'} – ${rateYear} rates): £${redundancyPay} (${totalWeeks} weeks)<br><em>${disclaimer}</em>`;
-  });
-
-  resetBtn.addEventListener('click', function () {
-    ageInput.value = '';
-    yearsInput.value = '';
-    payInput.value = '';
-    resultOutput.textContent = '';
-    regionSwitch.checked = false;
-
-    rateButtons.forEach(b => b.classList.remove('active'));
-    rateButtons[0].classList.add('active');
-    selectedRateYear = "2025";
-  });
-});
