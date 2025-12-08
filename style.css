@@ -84,8 +84,9 @@ input:checked + .slider::before {
   transform: translateX(26px);
 }
 
-/* Rate toggle bar (segmented control) */
+/* Rate toggle bar (segmented control with sliding background) */
 .rate-toggle-bar {
+  position: relative;
   display: flex;
   border: 2px solid #00a6c5;
   border-radius: 8px;
@@ -93,19 +94,34 @@ input:checked + .slider::before {
   margin: 20px 0;
 }
 
+/* Sliding background */
+.rate-toggle-bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background-color: #00a6c5;
+  border-radius: 6px;
+  z-index: 1;
+  transition: left 0.3s ease;
+}
+
 .rate-toggle-bar .rate-btn {
   flex: 1;
   padding: 10px 0;
   border: none;
-  background-color: white;
+  background: none;
   color: #00a6c5;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s;
+  z-index: 2;
+  position: relative;
+  transition: color 0.3s;
 }
 
 .rate-toggle-bar .rate-btn.active {
-  background-color: #00a6c5;
   color: white;
 }
 
