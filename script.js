@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  function getSelectedRegion() {
+  function getSelectedRegionCode() {
     return regionSwitch.checked ? 'NI' : 'GB';
   }
 
@@ -27,15 +27,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const age = parseInt(ageInput.value);
     const years = parseInt(yearsInput.value);
     let pay = parseFloat(payInput.value);
-    const region = getSelectedRegion();
+    const regionCode = getSelectedRegionCode();
     const rateYear = selectedRateYear;
 
+    // Weekly pay caps for statutory redundancy
     const caps = {
       GB: { "2025": 719, "2026": 719 },
       NI: { "2025": 749, "2026": 749 }
     };
 
-    const maxWeeklyPay = caps[region][rateYear];
+    const maxWeeklyPay = caps[regionCode][rateYear];
     const maxYears = 20;
 
     if (isNaN(age) || isNaN(years) || isNaN(pay)) {
@@ -57,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     pay = Math.min(pay, maxWeeklyPay);
 
+    // Calculate total weeks
     const effectiveYears = Math.min(years, maxYears);
     let totalWeeks = 0;
     for (let i = 0; i < effectiveYears; i++) {
@@ -68,11 +70,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const redundancyPay = (totalWeeks * pay).toFixed(2);
 
-    // Format year and region code
+    // Format display year
     const displayYear = rateYear === "2025" ? "25-26" : "26-27";
-    const regionCode = region === 'GB' ? 'GB' : 'NI';
 
-    // Only show disclaimer for 2025-2026
+    // Disclaimer only for 2025–2026
     const disclaimer = rateYear === "2025"
       ? "The stated rate will remain in effect until 05 April 2026."
       : "";
