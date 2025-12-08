@@ -1,3 +1,8 @@
+/* Apply box-sizing globally */
+* {
+  box-sizing: border-box;
+}
+
 /* General styles */
 html, body {
   margin: 0;
@@ -28,7 +33,6 @@ input[type="number"] {
   border: 2px solid #7fc28f;
   border-radius: 8px;
   font-size: 16px;
-  box-sizing: border-box;
 }
 
 /* Region switch */
@@ -84,7 +88,7 @@ input:checked + .slider::before {
   transform: translateX(26px);
 }
 
-/* Rate toggle bar (iOS-style hover toggle effect) */
+/* Rate toggle bar */
 .rate-toggle-bar {
   display: flex;
   border: 2px solid #00a6c5;
@@ -93,8 +97,9 @@ input:checked + .slider::before {
   margin: 20px 0;
 }
 
+/* Rate buttons */
 .rate-toggle-bar .rate-btn {
-  flex: 1;
+  flex: 1 1 0;
   padding: 10px 0;
   border: none;
   background-color: transparent;
@@ -102,16 +107,16 @@ input:checked + .slider::before {
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative;
+  width: 50%;
 }
 
-/* Active button style */
+/* Active button */
 .rate-toggle-bar .rate-btn.active {
   background-color: #00a6c5;
   color: white;
 }
 
-/* Hover toggle effect */
+/* Hover effect */
 .rate-toggle-bar .rate-btn:not(.active):hover {
   background-color: rgba(0, 166, 197, 0.2);
   color: #007c9e;
