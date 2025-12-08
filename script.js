@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let selectedRateYear = "2025"; // default
 
-  // Segmented toggle functionality
+  // Rate toggle selection
   rateButtons.forEach(btn => {
     btn.addEventListener('click', function () {
       rateButtons.forEach(b => b.classList.remove('active'));
@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const region = getSelectedRegion();
     const rateYear = selectedRateYear;
 
-    // Weekly caps (official rates)
     const caps = {
       GB: { "2025": 719, "2026": 719 },
       NI: { "2025": 749, "2026": 749 }
@@ -90,3 +89,4 @@ document.addEventListener('DOMContentLoaded', function () {
     selectedRateYear = "2025";
   });
 });
+
