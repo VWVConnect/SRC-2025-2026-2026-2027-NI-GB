@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Weekly pay caps for statutory redundancy
     const caps = {
       GB: { "2025": 719, "2026": 751 },
-      NI: { "2025": 749, "2026": 751 }
+      NI: { "2025": 749, "2026": 783 }
     };
 
     const maxWeeklyPay = caps[regionCode][rateYear];
