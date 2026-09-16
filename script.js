@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const ageInput = document.getElementById('age');
   const yearsInput = document.getElementById('years');
   const payInput = document.getElementById('pay');
-  const resultOutput = document.getElementById('result');https://github.com/VWVConnect/SRC-2025-2026-2026-2027-NI-GB/security
+  const resultOutput = document.getElementById('result');
   const calculateBtn = document.getElementById('calculateBtn');
   const resetBtn = document.getElementById('resetBtn');
   const regionSwitch = document.getElementById('regionSwitch');
